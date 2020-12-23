@@ -38,6 +38,6 @@ function save() {
 
 setInterval(function () {
   save();
-}, 10000);
+}, 900000);
 
 startLogging(false);
