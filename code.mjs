@@ -20,6 +20,7 @@ fs.readFile("./output.txt", "utf-8", (err, data) => {
 
 // Listen for keypresses and process them
 globalKbListener.addListener(function (e, down) {
+  // If we listen for DOWN it registers for as long as the key is pressed
   if (e.state === "UP") {
     keyPressCounter++;
     console.log(e.name);
