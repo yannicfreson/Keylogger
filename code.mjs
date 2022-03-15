@@ -38,7 +38,7 @@ globalKbListener.addListener(function (e, down) {
   // If we listen for DOWN it registers for as long as the key is pressed
   if (e.state === "UP") {
     keyPressCounter++;
-    console.log(e.name);
+    // console.log(e.name);
     keyPresses.push(e.name);
     if (keyPressCounter >= 100) {
       save();
