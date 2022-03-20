@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "firebase": "^9.6.9",
     "node-global-key-listener": "^0.0.13"
   },
   "type": "module"

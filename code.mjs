@@ -1,25 +1,35 @@
 import { GlobalKeyboardListener } from "node-global-key-listener";
 import * as fs from "fs";
+import { readFile } from "fs/promises";
+import { initializeApp } from "firebase/app";
+import { getDatabase, set, ref } from "firebase/database";
+
+const firebaseConfig = JSON.parse(
+  await readFile(new URL("./firebaseConfig.json", import.meta.url))
+);
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
 const globalKbListener = new GlobalKeyboardListener();
 
 let keyPressTally = {};
 let keyPressNames = {
-  BACKSLASH: "\\",
+  BACKSLASH: "BACKSLASH",
   BACKSPACE: "BACKSPACE",
   "CAPS LOCK": "CAPS_LOCK",
-  COMMA: ",",
+  COMMA: "COMMA",
   DELETE: "DELETE",
-  DOT: ".",
+  DOT: "DOT",
   END: "END",
-  EQUALS: "=",
-  ESCAPE: "ESC",
-  "FORWARD SLASH": "/",
+  EQUALS: "EQUALS",
+  ESCAPE: "ESCAPE",
+  "FORWARD SLASH": "FORWARD_SLASH",
   HOME: "HOME",
   INS: "INSERT",
   "LEFT ALT": "LEFT_ALT",
   "LEFT SHIFT": "LEFT_SHIFT",
-  MINUS: "-",
+  MINUS: "MINUS",
   "NUM LOCK": "NUM_LOCK",
   "NUMPAD 1": "NUM_1",
   "NUMPAD 2": "NUM_2",
@@ -38,14 +48,14 @@ let keyPressNames = {
   "PAGE DOWN": "PAGE_DOWN",
   "PAGE UP": "PAGE_UP",
   "PRINT SCREEN": "PRTSCR",
-  QUOTE: "'",
+  QUOTE: "QUOTE",
   RETURN: "RETURN",
   "RIGHT SHIFT": "RIGHT_SHIFT",
   "SCROLL LOCK": "SCROLL_LOCK",
   SECTION: "SECTION",
-  SEMICOLON: ";",
-  "SQUARE BRACKET CLOSE": "]",
-  "SQUARE BRACKET OPEN": "[",
+  SEMICOLON: "SEMICOLON",
+  "SQUARE BRACKET CLOSE": "SQUARE_BRACKET_CLOSE",
+  "SQUARE BRACKET OPEN": "SQUARE_BRACKET_CLOSE",
   TAB: "TAB",
   "UP ARROW": "UP",
   "LEFT ARROW": "LEFT",
@@ -62,7 +72,7 @@ fs.readFile("./output.txt", "utf-8", (err, data) => {
     return;
   }
   keyPressTally = JSON.parse(data);
-  console.log(keyPressTally);
+  //console.log(keyPressTally);
 });
 
 // Listen for keypresses and process them
@@ -72,7 +82,7 @@ globalKbListener.addListener(function (e, down) {
     keyPressCounter++;
     keyPressTally[keyPressNames[e.name] || e.name] ??= 0;
     keyPressTally[keyPressNames[e.name] || e.name]++;
-    if (keyPressCounter >= 20) {
+    if (keyPressCounter >= 100) {
       save();
       keyPressCounter = 0;
     }
@@ -91,5 +101,6 @@ function save() {
       console.log("saved!");
     }
   );
+  set(ref(database), { keyPressTally: keyPressTally });
 }
-//
+//yannicyannic freson
